@@ -6,10 +6,10 @@ if [ `uname -m` = 'aarch64' ]; then
    export PATH="$HOME/miniconda/bin:$PATH"
    hash -r
    chmod -R 777 $HOME/miniconda/
-   conda config --set always_yes yes --set changeps1 no
-   conda update -q conda
+   sudo conda config --set always_yes yes --set changeps1 no
+   sudo conda update -q conda
    conda info -a
-   conda activate 
+   sudo conda activate 
    sudo mkdir $HOME/.condrac
    sudo chmod -R 777 $HOME/miniconda/bin/activate 
    sudo chmod -R 777 /home/travis/.condarc
