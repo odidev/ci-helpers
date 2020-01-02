@@ -5,6 +5,7 @@ if [ `uname -m` = 'aarch64' ]; then
    bash archiconda.sh -b -p $HOME/miniconda
    export PATH="$HOME/miniconda/bin:$PATH"
    hash -r
+   chmod -r +x $HOME/miniconda/
    conda config --set always_yes yes --set changeps1 no
    conda update -q conda
    conda info -a
