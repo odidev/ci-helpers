@@ -12,6 +12,7 @@ if [ `uname -m` = 'aarch64' ]; then
    export PKGS="numpy scipy coverage nose pip"
    if [ "$PANDAS_VERSION_STR" != "NONE" ]; then export PKGS="${PKGS} pandas${PANDAS_VERSION_STR}"; fi
    sudo ln -s /home/travis/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+   ls /home/travis/miniconda/bin/ 
    conda activate 
    sudo mkdir $HOME/.condrac
    sudo chmod -R 777 /home/travis/.condarc
