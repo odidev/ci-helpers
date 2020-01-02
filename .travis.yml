@@ -9,7 +9,8 @@ language: c
 os:
     - linux
 
-sudo: false
+dist: bionic
+sudo: true
 
 env:
     global:
