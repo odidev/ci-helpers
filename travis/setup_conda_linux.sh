@@ -7,6 +7,7 @@ if [ `uname -m` = 'aarch64' ]; then
    export PATH="$HOME/miniconda/bin:$PATH"
    hash -r
    chmod -R 777 $HOME/miniconda/
+   sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
    conda config --set always_yes yes --set changeps1 no
    conda update -q conda
    conda info -a
