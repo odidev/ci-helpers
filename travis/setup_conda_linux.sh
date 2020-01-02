@@ -9,16 +9,12 @@ if [ `uname -m` = 'aarch64' ]; then
    sudo conda config --set always_yes yes --set changeps1 no
    sudo conda update -q conda
    sudo conda info -a
-   export PKGS="numpy scipy coverage nose pip"
-   if [ "$PANDAS_VERSION_STR" != "NONE" ]; then export PKGS="${PKGS} pandas${PANDAS_VERSION_STR}"; fi
-   sudo ln -s /home/travis/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
-   ls /home/travis/miniconda/bin/ 
    conda activate 
    sudo mkdir $HOME/.condrac
    sudo chmod -R 777 $HOME/miniconda/bin/activate 
    sudo chmod -R 777 /home/travis/.condarc
    conda info --envs
-   sudo conda activate base
+   conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
