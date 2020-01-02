@@ -197,14 +197,7 @@ if [[ -z $CONDA_VERSION ]]; then
          CONDA_VERSION=4.7.11
     fi
 fi
-
-if [[ -z $PIN_FILE_CONDA ]]; then
-    if [ `uname -m` = 'aarch64' ]; then
-        PIN_FILE_CONDA=$HOME/archiconda3/conda-meta/pinned
-    else 
-        PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
-    fi
-fi
+PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
 echo "appending pinned file "
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
 echo "conda install conda"
