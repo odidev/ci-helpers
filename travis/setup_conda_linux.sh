@@ -3,8 +3,7 @@ if [ `uname -m` = 'aarch64' ]; then
    wget -q "https://github.com/Archiconda/build-tools/releases/download/0.2.3/Archiconda3-0.2.3-Linux-aarch64.sh" -O archiconda.sh
    chmod +x archiconda.sh
    bash archiconda.sh -b -p $HOME/miniconda
-   export PATH="$HOME/miniconda/bin:$PATH"
-   in ~/.bashrc
+   export PATH="$HOME/miniconda/bin:$PATH">> ~/.bashrc
    source ~/.bashrc
    sudo cp -r $HOME/miniconda/bin/* /usr/bin/
    hash -r
