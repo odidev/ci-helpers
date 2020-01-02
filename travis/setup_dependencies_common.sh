@@ -1,5 +1,5 @@
 #!/bin/bash -x
-
+echo "1"
 hash -r
 
 set -e
@@ -102,6 +102,7 @@ function retry_on_known_error() {
             fi
         fi
 
+        echo "2"
         # If the command was sucessful, abort the retry loop:
         if [ "$_exitval" == "0" ]; then
             break
@@ -200,7 +201,7 @@ fi
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
 
 retry_on_known_error conda install $QUIET conda
-
+echo "3"
 if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
     CONDA_CHANNEL_PRIORITY=disabled
 else
@@ -303,6 +304,7 @@ retry_on_known_error conda install --no-channel-priority $QUIET $PYTHON_OPTION p
 #
 # For really old pythons it may be necessary, though, so check pip version and
 # install this way if the major version is less than 19.
+echo "4"
 if [[ -z $PIP_VERSION ]]; then
     old_pip=$(python -c "from distutils.version import LooseVersion;\
                 import os; import pip;\
@@ -388,7 +390,7 @@ if [[ ! -z $CONDA_DEPENDENCIES ]]; then
         echo $CONDA_DEPENDENCIES
     fi
 fi
-
+echo "5"
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     # Do a dry run of the conda install here to make sure that pins are
     # ACTUALLY being respected. This will become unnecessary when
@@ -405,6 +407,7 @@ if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     #     test in an if statement...
     #
     # Use tee to print output to console and to file to avoid travis timing out
+    
     _tmp_output_file="tmp.txt"
     # do not exit on failure of the dry run because pip fallback may succeed
     set +e
@@ -518,7 +521,7 @@ else
     export NUMPY_OPTION=""
     export CONDA_INSTALL="conda install $QUIET $PYTHON_OPTION $MKL"
 fi
-
+echo "6"
 # try to install numpy:
 if [[ ! -z $NUMPY_INSTALL ]]; then
     retry_on_known_error $NUMPY_INSTALL || { \
@@ -597,7 +600,7 @@ if [[ ! -z $ASTROPY_VERSION ]]; then
     fi
 
 fi
-
+echo "7"
 # SUNPY
 if [[ ! -z $SUNPY_VERSION ]]; then
     if [[ $SUNPY_VERSION == dev* ]]; then
@@ -700,7 +703,7 @@ if [[ $SETUP_CMD == *build_sphinx* ]] || [[ $SETUP_CMD == *build_docs* ]]; then
     fi
 
 fi
-
+echo "8"
 # ADDITIONAL DEPENDENCIES (can include optionals, too)
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     retry_on_known_error $CONDA_INSTALL $CONDA_DEPENDENCIES $CONDA_DEPENDENCIES_FLAGS || { \
@@ -742,7 +745,7 @@ fi
 if [[ $SETUP_CMD == *open-files* ]]; then
     retry_on_known_error $CONDA_INSTALL psutil
 fi
-
+echo "9"
 # NUMPY DEV and PRE
 
 # We now install Numpy dev - this has to be done last, otherwise conda might
@@ -801,7 +804,7 @@ if [[ $SCIKIT_LEARN_VERSION == dev* ]]; then
 
     $PIP_INSTALL git+https://github.com/scikit-learn/scikit-learn.git#egg=sklearn --upgrade --no-deps
 fi
-
+eco "9"
 if [[ $SCIKIT_LEARN_VERSION == pre* ]]; then
     $PIP_INSTALL --pre --upgrade --no-deps scikit-learn
 fi
@@ -911,7 +914,7 @@ if [[ $DEBUG == True ]]; then
     # exist for python >=3.7
     conda info -a
 fi
-
+echo "10"
 if [[ ! -z $ASTROPY_VERSION ]]; then
     # Force uninstall hypothesis if it's silently installed as an upstream
     # dependency as the astropy <2.0.3 machinery is incompatible with
