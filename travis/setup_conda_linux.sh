@@ -5,9 +5,9 @@ if [ `uname -m` = 'aarch64' ]; then
    bash archiconda.sh -b -p $HOME/miniconda
    export PATH="$HOME/miniconda/bin:$PATH"
    hash -r
-   sudo conda config --set always_yes yes --set changeps1 no
-   sudo conda update -q conda
-   sudo conda info -a
+   conda config --set always_yes yes --set changeps1 no
+   conda update -q conda
+   conda info -a
    conda activate 
    sudo mkdir $HOME/.condrac
    sudo chmod -R 777 $HOME/miniconda/bin/activate 
