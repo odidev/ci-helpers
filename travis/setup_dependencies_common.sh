@@ -212,8 +212,10 @@ sudo chmod -R 777 $MINICONDA_DIR
 retry_on_known_error conda install $QUIET conda
 echo "3"
 if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
+     echo $CONDA_CHANNEL_PRIORITY 
     CONDA_CHANNEL_PRIORITY=disabled
 else
+    echo $CONDA_CHANNEL_PRIORITY 
     # Make lowercase
     CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
 fi
