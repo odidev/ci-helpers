@@ -63,6 +63,15 @@ if [ `uname -m` = 'aarch64' ]; then
    $IS_SUDO cp $MINICONDA_DIR/bin/* /usr/bin/
    $IS_SUDO rm /usr/bin/lsb_release
    export PATH=$MINICONDA_DIR/bin:$PATH
+   echo
+   echo "which conda"
+   which conda
+   
+   echo
+   echo "update conda"
+   conda config --set ssl_verify false
+   conda config --set quiet true --set always_yes true --set changeps1 false
+   sudo conda update -n base conda
    echo "conda activate base "
    sudo conda activate base 
 else
