@@ -15,6 +15,7 @@ if [ `uname -m` = 'aarch64' ]; then
    ls /home/travis/miniconda/bin/ 
    conda activate 
    sudo mkdir $HOME/.condrac
+   sudo chmod -R 777 $HOME/miniconda/bin/activate 
    sudo chmod -R 777 /home/travis/.condarc
    conda info --envs
    sudo conda activate base
