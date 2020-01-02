@@ -199,6 +199,7 @@ if [[ -z $PIN_FILE_CONDA ]]; then
         PIN_FILE_CONDA=$HOME/archiconda3/conda-meta/pinned
     else 
         PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
+    fi
 fi
 
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
