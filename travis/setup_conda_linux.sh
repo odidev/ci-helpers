@@ -14,8 +14,8 @@ if [ `uname -m` = 'aarch64' ]; then
    $HOME/miniconda/bin/conda init bash
    source ~/.bash_profile
    sudo chmod -R 777 /home/travis/.condarc
-   conda create base 
-   conda activate base
+   sudo conda create base 
+   sudo conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
