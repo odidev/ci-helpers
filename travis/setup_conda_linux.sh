@@ -62,7 +62,7 @@ if [ `uname -m` = 'aarch64' ]; then
    $IS_SUDO chmod -R 777 $MINICONDA_DIR
    $IS_SUDO cp $MINICONDA_DIR/bin/* /usr/bin/
    $IS_SUDO rm /usr/bin/lsb_release
-   export PATH=$PATH:home/travis/archiconda3/bin/
+   export PATH=$MINICONDA_DIR/bin:$PATH
    echo "conda activate base "
    sudo conda activate base 
 else
