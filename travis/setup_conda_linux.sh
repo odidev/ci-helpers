@@ -13,6 +13,8 @@ if [ `uname -m` = 'aarch64' ]; then
    if [ "$PANDAS_VERSION_STR" != "NONE" ]; then export PKGS="${PKGS} pandas${PANDAS_VERSION_STR}"; fi
    $HOME/miniconda/bin/conda init bash
    source ~/.bash_profile
+   sudo chmod -R 777 /home/travis/.condarc
+   conda create base 
    conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
