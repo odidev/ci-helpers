@@ -11,11 +11,11 @@ if [ `uname -m` = 'aarch64' ]; then
    sudo conda update -q conda
    conda info -a
    sudo conda activate 
-   sudo mkdir $HOME/.condrac
+   mkdir $HOME/.condrac
    sudo chmod -R 777 $HOME/miniconda/bin/activate 
    sudo chmod -R 777 /home/travis/.condarc
    conda info --envs
-   activate base
+   sudo conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
