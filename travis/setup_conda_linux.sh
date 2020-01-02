@@ -7,15 +7,15 @@ if [ `uname -m` = 'aarch64' ]; then
    export PATH="$HOME/miniconda/bin:$PATH"
    hash -r
    chmod -R 777 $HOME/miniconda/
-   sudo conda config --set always_yes yes --set changeps1 no
-   sudo conda update -q conda
+   conda config --set always_yes yes --set changeps1 no
+   conda update -q conda
    conda info -a
-   sudo conda activate 
-   mkdir $HOME/.condrac
+   conda activate 
+   mkdir /home/travis/.condrac
    sudo chmod -R 777 $HOME/miniconda/bin/activate 
    sudo chmod -R 777 /home/travis/.condarc
    conda info --envs
-   sudo conda activate base
+   conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
