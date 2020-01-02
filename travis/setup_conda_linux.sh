@@ -11,10 +11,10 @@ if [ `uname -m` = 'aarch64' ]; then
    sudo conda info -a
    export PKGS="numpy scipy coverage nose pip"
    if [ "$PANDAS_VERSION_STR" != "NONE" ]; then export PKGS="${PKGS} pandas${PANDAS_VERSION_STR}"; fi
-   $HOME/miniconda/bin/conda init bash
    source ~/.bash_profile
+   sudo mkdir $HOME/.condrac
    sudo chmod -R 777 /home/travis/.condarc
-   sudo conda create base 
+   conda info --envs
    sudo conda activate base
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
