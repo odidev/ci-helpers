@@ -808,7 +808,6 @@ if [[ $SCIKIT_LEARN_VERSION == dev* ]]; then
 
     $PIP_INSTALL git+https://github.com/scikit-learn/scikit-learn.git#egg=sklearn --upgrade --no-deps
 fi
-eco "9"
 if [[ $SCIKIT_LEARN_VERSION == pre* ]]; then
     $PIP_INSTALL --pre --upgrade --no-deps scikit-learn
 fi
