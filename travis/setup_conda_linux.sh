@@ -62,6 +62,8 @@ if [ `uname -m` = 'aarch64' ]; then
    $IS_SUDO chmod -R 777 $MINICONDA_DIR
    $IS_SUDO cp $MINICONDA_DIR/bin/* /usr/bin/
    $IS_SUDO rm /usr/bin/lsb_release
+   echo "conda activate base "
+   conda activate base 
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
@@ -71,19 +73,9 @@ else
     conda activate base
 
 fi
-
+source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 export PATH=$MINICONDA_DIR/bin:$PATH
 
 echo
 echo "which conda"
 which conda
-
-echo
-echo "update conda"
-conda config --set ssl_verify false
-conda config --set quiet true --set always_yes true --set changeps1 false
-$IS_SUDO conda install pip  # create conda to create a historical artifact for pip & setuptools
-$IS_SUDO conda update -n base conda
-
-echo "conda info -a"
-conda info -a
