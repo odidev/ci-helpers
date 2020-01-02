@@ -202,7 +202,7 @@ echo "appending pinned file "
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
 echo "conda install conda"
 if [ `uname -m` = 'aarch64' ]; then
-    sudo chmod -R 777 $MINICONDA_DIR
+    sudo chmod -R 777 $HOME/miniconda
 fi
 retry_on_known_error conda install $QUIET conda
 echo "3"
