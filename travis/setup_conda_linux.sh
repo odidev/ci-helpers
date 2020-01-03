@@ -3,19 +3,17 @@ if [ `uname -m` = 'aarch64' ]; then
    wget -q "https://github.com/Archiconda/build-tools/releases/download/0.2.3/Archiconda3-0.2.3-Linux-aarch64.sh" -O archiconda.sh
    chmod +x archiconda.sh
    bash archiconda.sh -b -p $HOME/miniconda
-   export PATH="$HOME/miniconda/bin:$PATH">> ~/.bashrc
-   source ~/.bashrc
+   export PATH="$HOME/miniconda/bin:$PATH"
    sudo cp -r $HOME/miniconda/bin/* /usr/bin/
    hash -r
    sudo conda config --set always_yes yes --set changeps1 no
    sudo conda update -q conda
    sudo conda info -a
-   sudo conda activate base 
    source activate base
    if [[ -z $CONDA_ENVIRONMENT ]]; then
-   sudo conda create $QUIET -n -b test $PYTHON_OPTION
+   sudo conda create -q -n  test $PYTHON_OPTION
    else
-   sudo conda create $QUIET -q -n testenv python=3.7 $CONDA_ENVIRONMENT
+   sudo conda create -q -n test python=3.7 $CONDA_ENVIRONMENT
    fi
    source activate testenv
 else
