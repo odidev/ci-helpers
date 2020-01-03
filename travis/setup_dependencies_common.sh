@@ -522,8 +522,10 @@ fi
 
 # We use --no-pin to avoid installing other dependencies just yet.
 
-
-MKL='nomkl'
+if [ `uname -m` = aarch64]; then
+    MKL='';
+else
+    MKL='nomkl';
 if [[ ! -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') ||
         $TRAVIS_OS_NAME == windows || -z $NUMPY_VERSION ]]; then
     MKL=''
