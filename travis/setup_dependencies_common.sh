@@ -3,7 +3,11 @@ echo "1"
 hash -r
 
 set -e
-
+if [ `uname -m` = 'aarch64' ]; then
+    sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
+    sudo chmod -R 777 /home/travis/miniconda
+    sudo chmod -R 777 /home/travis/.condarc
+fi
 
 # If not set from outside, initialize parameters for the retry_on_known_error()
 # function:
