@@ -238,12 +238,13 @@ if [ `uname -m` != 'aarch64' ]; then
         PYTHON_OPTION="python=3.7"
     else
         PYTHON_OPTION=""
-    
+    fi
 else    
     if [[ ! -z $PYTHON_VERSION ]]; then
         PYTHON_OPTION="python=$PYTHON_VERSION"
     else
         PYTHON_OPTION=""
+    fi
 fi
 
 # Setting the MPL backend to a default to avoid occational segfaults with the qt backend
