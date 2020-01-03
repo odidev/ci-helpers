@@ -526,6 +526,7 @@ if [ `uname -m` = aarch64]; then
     MKL='';
 else
     MKL='nomkl';
+fi
 if [[ ! -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') ||
         $TRAVIS_OS_NAME == windows || -z $NUMPY_VERSION ]]; then
     MKL=''
