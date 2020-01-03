@@ -12,6 +12,12 @@ if [ `uname -m` = 'aarch64' ]; then
    sudo conda update -q conda
    sudo conda info -a
    sudo activate base
+   if [[ -z $CONDA_ENVIRONMENT ]]; then
+   sudo conda create $QUIET -n test $PYTHON_OPTION
+   else
+   sudo conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
+   fi
+   sudo activate test
 else
    wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh" -O miniconda.sh
    chmod +x miniconda.sh
