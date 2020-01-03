@@ -258,7 +258,7 @@ if [ `uname -m` = 'aarch64' ]; then
    else
     retry_on_known_error conda create -q -n test $CONDA_ENVIRONMENT
    fi
-   service activate test
+   source activate test
 else 
    if [[ -z $CONDA_ENVIRONMENT ]]; then
     retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
