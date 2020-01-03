@@ -173,10 +173,11 @@ else
             print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.5')") == False ]]; then
         export LATEST_ASTROPY_STABLE=4.0
         export LATEST_NUMPY_STABLE=1.18 
-    else
+     else
         export LATEST_ASTROPY_STABLE=2.0.16
         export NO_PYTEST_ASTROPY=True
         export LATEST_NUMPY_STABLE=1.16
+     fi
 fi        
 export ASTROPY_LTS_VERSION=2.0.16
 export LATEST_SUNPY_STABLE=1.0.6
