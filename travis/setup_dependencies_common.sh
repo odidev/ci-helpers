@@ -190,6 +190,11 @@ fi
 
 # We pin the version for conda as it's not the most stable package from
 # release to release. Add note here if version is pinned due to a bug upstream.
+if [ `uname -m` = 'aarch64' ]; then
+    sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
+    sudo chmod -R 777 /home/travis/miniconda
+    sudo chmod -R 777 /home/travis/.condarc
+fi
 if [[ -z $CONDA_VERSION ]]; then
    if [ `uname -m` = 'aarch64' ]; then
         CONDA_VERSION=4.5.12
@@ -201,11 +206,6 @@ PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
 echo "appending pinned file "
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
 echo "conda install conda"
-if [ `uname -m` = 'aarch64' ]; then
-    sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
-    sudo chmod -R 777 /home/travis/miniconda
-    sudo chmod -R 777 /home/travis/.condarc
-fi
 retry_on_known_error conda install $QUIET conda
 echo "3"
 if [ `uname -m` != 'aarch64' ]; then
