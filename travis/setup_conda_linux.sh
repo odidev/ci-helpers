@@ -8,6 +8,7 @@ if [[ -z "${MINICONDA_VERSION}" ]]; then
 fi
 
 if [ `uname -m` = 'aarch64' ]; then
+   apt-get install python3 python3-dev python3-setuptools cython cython3 python3-pip gcc gfortran libblas-dev liblapack-dev;
    wget -q "https://github.com/Archiconda/build-tools/releases/download/0.2.3/Archiconda3-0.2.3-Linux-aarch64.sh" -O archiconda.sh
    chmod +x archiconda.sh
    bash archiconda.sh -b -p $HOME/miniconda
