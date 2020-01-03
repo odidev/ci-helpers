@@ -7,6 +7,7 @@ if [ `uname -m` = 'aarch64' ]; then
     sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
     sudo chmod -R 777 /home/travis/miniconda
     sudo chmod -R 777 /home/travis/.condarc
+    sudo rm /usr/bin/lsb_release
 fi
 
 # If not set from outside, initialize parameters for the retry_on_known_error()
