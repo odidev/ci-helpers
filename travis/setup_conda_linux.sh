@@ -27,7 +27,6 @@ else
    conda activate base
    source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 fi
-source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 export PATH=$MINICONDA_DIR/bin:$PATH
 
 echo
