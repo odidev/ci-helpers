@@ -8,6 +8,7 @@ if [ `uname -m` = 'aarch64' ]; then
     sudo chmod -R 777 /home/travis/miniconda
     sudo chmod -R 777 /home/travis/.condarc
     sudo rm /usr/bin/lsb_release
+    sudo apt-get install python3 python3-dev python3-setuptools cython cython3 python3-pip gcc gfortran libblas-dev liblapack-dev
 fi
 
 # If not set from outside, initialize parameters for the retry_on_known_error()
