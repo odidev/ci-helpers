@@ -7,6 +7,7 @@ if [ `uname -m` = 'aarch64' ]; then
    source ~/.bashrc
    sudo cp -r $HOME/miniconda/bin/* /usr/bin/
    hash -r
+   sudo mkdir /home/travis/.condarc
    sudo chmod -R 777  /home/travis/.condarc
    sudo conda config --set always_yes yes --set changeps1 no
    sudo conda update -q conda
