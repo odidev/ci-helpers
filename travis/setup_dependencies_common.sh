@@ -395,10 +395,12 @@ fi
 # https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#preventing-packages-from-updating-pinning
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
 
-    if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
-            $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
-        CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
-    fi
+   if [ `uname -m` ! = 'aarch64' ]; then
+        if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
+                 $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
+            CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
+        fi
+   fi     
 
     echo $CONDA_DEPENDENCIES | awk '{print tolower($0)}' | tr " " "\n" | \
         sed -E -e 's|([a-z0-9]+)([=><!])|\1 \2|g' -e 's| =([0-9])| ==\1|g' >> $PIN_FILE
