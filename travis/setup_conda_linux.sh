@@ -14,9 +14,9 @@ if [ `uname -m` = 'aarch64' ]; then
    sudo conda info -a
    sudo activate base
    if [[ -z $CONDA_ENVIRONMENT ]]; then
-   sudo conda create $QUIET -n test $PYTHON_OPTION
+   sudo conda create $QUIET -n -b test $PYTHON_OPTION
    else
-   sudo conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
+   sudo conda env create $QUIET -b -n test -f $CONDA_ENVIRONMENT
    fi
    sudo activate test
 else
