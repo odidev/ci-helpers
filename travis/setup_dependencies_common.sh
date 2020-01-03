@@ -232,10 +232,18 @@ echo "PYTHONIOENCODING=UTF8"
 export PYTHONIOENCODING=UTF8
 
 # Making sure we don't upgrade python accidentally
-if [[ ! -z $PYTHON_VERSION ]]; then
-    PYTHON_OPTION="python=$PYTHON_VERSION"
-else
-    PYTHON_OPTION=""
+if [ `uname -m` != 'aarch64' ]; then
+    
+    if [[ ! -z $PYTHON_VERSION ]]; then
+        PYTHON_OPTION="python=3.7"
+    else
+        PYTHON_OPTION=""
+    
+else    
+    if [[ ! -z $PYTHON_VERSION ]]; then
+        PYTHON_OPTION="python=$PYTHON_VERSION"
+    else
+        PYTHON_OPTION=""
 fi
 
 # Setting the MPL backend to a default to avoid occational segfaults with the qt backend
