@@ -252,12 +252,22 @@ fi
 
 
 # CONDA
-if [[ -z $CONDA_ENVIRONMENT ]]; then
+if [ `uname -m` = 'aarch64' ]; then
+   if [[ -z $CONDA_ENVIRONMENT ]]; then
+    retry_on_known_error conda create -q -n test  $PYTHON_OPTION
+   else
+    retry_on_known_error conda create -q -n test $CONDA_ENVIRONMENT
+   fi
+   service activate test
+else 
+   if [[ -z $CONDA_ENVIRONMENT ]]; then
     retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
-else
+   else
     retry_on_known_error conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
+   fi
+   conda activate test
 fi
-conda activate test
+
 
 # PIN FILE
 if [[ -z $PIN_FILE ]]; then
