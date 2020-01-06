@@ -924,10 +924,15 @@ fi
 # installed, and then overritten later by the dev version (which would waste
 # build time)
 
-if [[ ! -z $PIP_DEPENDENCIES ]]; then
-    $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
+if [`uname -m ` != 'aarch64']; then
+    if [[ ! -z $PIP_DEPENDENCIES ]]; then
+        $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
+    fi
+else 
+    if [[ ! -z $PIP_DEPENDENCIES && $PIP_DEPENDENCIES != 'numpy' ]]; then 
+        $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
+    fi
 fi
-
 
 # COVERAGE DEPENDENCIES
 
