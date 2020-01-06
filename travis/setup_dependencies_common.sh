@@ -160,23 +160,23 @@ if [ `uname -m` = 'aarch64' ]; then
     if [[ $(python -c "from distutils.version import LooseVersion; import os;\
             print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.7')") == False ]]; then
         export LATEST_ASTROPY_STABLE=4.0
-        export LATEST_NUMPY_STABLE=1.17 
+        export LATEST_NUMPY_STABLE=1.17
     else
         export LATEST_ASTROPY_STABLE=2.0.16
         export NO_PYTEST_ASTROPY=True
         export LATEST_NUMPY_STABLE=1.16
     fi
-else 
+else
      if [[ $(python -c "from distutils.version import LooseVersion; import os;\
             print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.5')") == False ]]; then
         export LATEST_ASTROPY_STABLE=4.0
-        export LATEST_NUMPY_STABLE=1.18 
+        export LATEST_NUMPY_STABLE=1.18
      else
         export LATEST_ASTROPY_STABLE=2.0.16
         export NO_PYTEST_ASTROPY=True
         export LATEST_NUMPY_STABLE=1.16
      fi
-fi        
+fi
 export ASTROPY_LTS_VERSION=2.0.16
 export LATEST_SUNPY_STABLE=1.0.6
 
@@ -209,8 +209,8 @@ fi
 if [[ -z $CONDA_VERSION ]]; then
     if [ `uname -m` = 'aarch64' ]; then
         CONDA_VERSION=4.5.12
-    else 
-         CONDA_VERSION=4.7.11
+    else
+        CONDA_VERSION=4.7.11
     fi
 fi
 PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
@@ -224,16 +224,15 @@ if [ `uname -m` != 'aarch64' ]; then
         CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
     fi
 
-# We need to add this after the update, otherwise the ``channel_priority``
-# key may not yet exists
-conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
+        # We need to add this after the update, otherwise the ``channel_priority``
+        # key may not yet exists
+    conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
 fi
 # Use utf8 encoding. Should be default, but this is insurance against
 # future changes
 export PYTHONIOENCODING=UTF8
 
 # Making sure we don't upgrade python accidentally
-  
 if [[ ! -z $PYTHON_VERSION ]]; then
     PYTHON_OPTION="python=$PYTHON_VERSION"
 else
@@ -262,7 +261,7 @@ if [ `uname -m` == 'aarch64' ]; then
     retry_on_known_error conda create -q -n test python=3.7 $CONDA_ENVIRONMENT
    fi
    source activate test
-else 
+else
    if [[ -z $CONDA_ENVIRONMENT ]]; then
     retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
    else
@@ -373,13 +372,12 @@ fi
 # Pin required versions for dependencies, howto is in FAQ of conda
 # https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#preventing-packages-from-updating-pinning
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
-
-   if [ `uname -m` ! = 'aarch64' ]; then
+    if [ `uname -m` ! = 'aarch64' ]; then
         if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
                  $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
             CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
         fi
-   fi     
+    fi
 
     echo $CONDA_DEPENDENCIES | awk '{print tolower($0)}' | tr " " "\n" | \
         sed -E -e 's|([a-z0-9]+)([=><!])|\1 \2|g' -e 's| =([0-9])| ==\1|g' >> $PIN_FILE
@@ -418,6 +416,7 @@ if [[ ! -z $CONDA_DEPENDENCIES ]]; then
         echo $CONDA_DEPENDENCIES
     fi
 fi
+
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     # Do a dry run of the conda install here to make sure that pins are
     # ACTUALLY being respected. This will become unnecessary when
@@ -434,7 +433,6 @@ if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     #     test in an if statement...
     #
     # Use tee to print output to console and to file to avoid travis timing out
-    
     _tmp_output_file="tmp.txt"
     # do not exit on failure of the dry run because pip fallback may succeed
     set +e
@@ -500,6 +498,7 @@ fi
 
 # We use --no-pin to avoid installing other dependencies just yet.
 
+
 if [ `uname -m` = aarch64]; then
     MKL='';
 else
@@ -551,6 +550,7 @@ else
     export NUMPY_OPTION=""
     export CONDA_INSTALL="conda install $QUIET $PYTHON_OPTION $MKL"
 fi
+
 # try to install numpy:
 if [[ ! -z $NUMPY_INSTALL ]]; then
     retry_on_known_error $NUMPY_INSTALL || { \
@@ -629,6 +629,7 @@ if [[ ! -z $ASTROPY_VERSION ]]; then
     fi
 
 fi
+
 # SUNPY
 if [[ ! -z $SUNPY_VERSION ]]; then
     if [[ $SUNPY_VERSION == dev* ]]; then
@@ -731,6 +732,7 @@ if [[ $SETUP_CMD == *build_sphinx* ]] || [[ $SETUP_CMD == *build_docs* ]]; then
     fi
 
 fi
+
 # ADDITIONAL DEPENDENCIES (can include optionals, too)
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     retry_on_known_error $CONDA_INSTALL $CONDA_DEPENDENCIES $CONDA_DEPENDENCIES_FLAGS || { \
@@ -772,7 +774,7 @@ fi
 if [[ $SETUP_CMD == *open-files* ]]; then
     retry_on_known_error $CONDA_INSTALL psutil
 fi
-echo "9"
+
 # NUMPY DEV and PRE
 
 # We now install Numpy dev - this has to be done last, otherwise conda might
@@ -831,6 +833,7 @@ if [[ $SCIKIT_LEARN_VERSION == dev* ]]; then
 
     $PIP_INSTALL git+https://github.com/scikit-learn/scikit-learn.git#egg=sklearn --upgrade --no-deps
 fi
+
 if [[ $SCIKIT_LEARN_VERSION == pre* ]]; then
     $PIP_INSTALL --pre --upgrade --no-deps scikit-learn
 fi
@@ -940,6 +943,7 @@ if [[ $DEBUG == True ]]; then
     # exist for python >=3.7
     conda info -a
 fi
+
 if [[ ! -z $ASTROPY_VERSION ]]; then
     # Force uninstall hypothesis if it's silently installed as an upstream
     # dependency as the astropy <2.0.3 machinery is incompatible with
