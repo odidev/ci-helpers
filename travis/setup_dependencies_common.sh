@@ -533,11 +533,10 @@ if [[ ! -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') ||
 fi
 
 # determine how to install numpy:
-
 NUMPY_INSTALL=''
 if [[ $NUMPY_VERSION == dev* ]]; then
     # We use C99 to build Numpy.
-    #  If CFLAGS already defined by calling pkg, it's up to them to set this.
+    # If CFLAGS already defined by calling pkg, it's up to them to set this.
     if [[ -z $CFLAGS ]]; then
         export CFLAGS="-std=c99"
     fi
@@ -568,12 +567,12 @@ elif [[ $NUMPY_VERSION == pre* ]]; then
 elif [[ ! -z $NUMPY_VERSION ]]; then
     export NUMPY_OPTION="numpy=$NUMPY_VERSION"
     export CONDA_INSTALL="conda install $QUIET $PYTHON_OPTION $NUMPY_OPTION $MKL"
-    NUMPY_INSTALL="conda install $QUIET --no-pin $PYTHON_OPTION $NUMPY_OPTION $M
+    NUMPY_INSTALL="conda install $QUIET --no-pin $PYTHON_OPTION $NUMPY_OPTION $MKL"
+
 else
     export NUMPY_OPTION=""
     export CONDA_INSTALL="conda install $QUIET $PYTHON_OPTION $MKL"
 fi
-
 echo "6"
 # try to install numpy:
 if [[ ! -z $NUMPY_INSTALL ]]; then
@@ -804,15 +803,14 @@ echo "9"
 # We now install Numpy dev - this has to be done last, otherwise conda might
 # install a stable version of Numpy as a dependency to another package, which
 # would override Numpy dev or pre.
-if [ `uname -m` != 'aarch64' ]; then
-    if [[ $NUMPY_VERSION == dev* ]]; then
-        retry_on_known_error conda install $QUIET Cython
-        $PIP_INSTALL git+https://github.com/numpy/numpy.git#egg=numpy --upgrade --no-deps
-    fi
 
-    if [[ $NUMPY_VERSION == pre* ]]; then
-        $PIP_INSTALL --pre --upgrade numpy
-    fi
+if [[ $NUMPY_VERSION == dev* ]]; then
+    retry_on_known_error conda install $QUIET Cython
+    $PIP_INSTALL git+https://github.com/numpy/numpy.git#egg=numpy --upgrade --no-deps
+fi
+
+if [[ $NUMPY_VERSION == pre* ]]; then
+    $PIP_INSTALL --pre --upgrade numpy
 fi
 
 # MATPLOTLIB DEV
@@ -925,15 +923,10 @@ fi
 # installed, and then overritten later by the dev version (which would waste
 # build time)
 
-if [`uname -m ` != 'aarch64']; then
-    if [[ ! -z $PIP_DEPENDENCIES ]]; then
-        $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
-    fi
-else 
-    if [[ ! -z $PIP_DEPENDENCIES && $PIP_DEPENDENCIES != 'numpy' ]]; then 
-        $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
-    fi
+if [[ ! -z $PIP_DEPENDENCIES ]]; then
+    $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
 fi
+
 
 # COVERAGE DEPENDENCIES
 
