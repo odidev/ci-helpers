@@ -40,7 +40,3 @@ else
    
 fi
 export PATH=$MINICONDA_DIR/bin:$PATH
-
-echo
-echo "which conda"
-which conda
