@@ -803,14 +803,15 @@ echo "9"
 # We now install Numpy dev - this has to be done last, otherwise conda might
 # install a stable version of Numpy as a dependency to another package, which
 # would override Numpy dev or pre.
+if [ `uname -m` = 'aarch64' ]; then
+    if [[ $NUMPY_VERSION == dev* ]]; then
+        retry_on_known_error conda install $QUIET Cython
+        $PIP_INSTALL git+https://github.com/numpy/numpy.git#egg=numpy --upgrade --no-deps
+    fi
 
-if [[ $NUMPY_VERSION == dev* ]]; then
-    retry_on_known_error conda install $QUIET Cython
-    $PIP_INSTALL git+https://github.com/numpy/numpy.git#egg=numpy --upgrade --no-deps
-fi
-
-if [[ $NUMPY_VERSION == pre* ]]; then
-    $PIP_INSTALL --pre --upgrade numpy
+    if [[ $NUMPY_VERSION == pre* ]]; then
+        $PIP_INSTALL --pre --upgrade numpy
+    fi
 fi
 
 # MATPLOTLIB DEV
