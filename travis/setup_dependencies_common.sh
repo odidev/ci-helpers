@@ -1,5 +1,4 @@
 #!/bin/bash -x
-echo "1"
 hash -r
 
 set -e
@@ -107,7 +106,6 @@ function retry_on_known_error() {
             fi
         fi
 
-        echo "2"
         # If the command was sucessful, abort the retry loop:
         if [ "$_exitval" == "0" ]; then
             break
@@ -208,30 +206,20 @@ fi
 
 # We pin the version for conda as it's not the most stable package from
 # release to release. Add note here if version is pinned due to a bug upstream.
-if [ `uname -m` = 'aarch64' ]; then
-    sudo chown 1000:1000 /home/travis/miniconda/pkgs/urls.txt
-    sudo chmod -R 777 /home/travis/miniconda
-    sudo chmod -R 777 /home/travis/.condarc
-fi
 if [[ -z $CONDA_VERSION ]]; then
-   if [ `uname -m` = 'aarch64' ]; then
+    if [ `uname -m` = 'aarch64' ]; then
         CONDA_VERSION=4.5.12
     else 
          CONDA_VERSION=4.7.11
     fi
 fi
 PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
-echo "appending pinned file "
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
-echo "conda install conda"
 retry_on_known_error conda install $QUIET conda
-echo "3"
 if [ `uname -m` != 'aarch64' ]; then
     if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
-        echo $CONDA_CHANNEL_PRIORITY 
         CONDA_CHANNEL_PRIORITY=disabled
     else
-        echo $CONDA_CHANNEL_PRIORITY 
         # Make lowercase
         CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
     fi
@@ -242,24 +230,16 @@ conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
 fi
 # Use utf8 encoding. Should be default, but this is insurance against
 # future changes
-echo "PYTHONIOENCODING=UTF8"
 export PYTHONIOENCODING=UTF8
 
 # Making sure we don't upgrade python accidentally
-if [ `uname -m` != 'aarch64' ]; then
-    
-    if [[ ! -z $PYTHON_VERSION ]]; then
-        PYTHON_OPTION="python=3.7"
-    else
-        PYTHON_OPTION=""
-    fi
-else    
-    if [[ ! -z $PYTHON_VERSION ]]; then
-        PYTHON_OPTION="python=$PYTHON_VERSION"
-    else
-        PYTHON_OPTION=""
-    fi
+  
+if [[ ! -z $PYTHON_VERSION ]]; then
+    PYTHON_OPTION="python=$PYTHON_VERSION"
+else
+    PYTHON_OPTION=""
 fi
+
 
 # Setting the MPL backend to a default to avoid occational segfaults with the qt backend
 if [[ -z $MPLBACKEND ]]; then
@@ -275,7 +255,7 @@ fi
 
 
 # CONDA
-if [ `uname -m` = 'aarch64' ]; then
+if [ `uname -m` == 'aarch64' ]; then
    if [[ -z $CONDA_ENVIRONMENT ]]; then
     retry_on_known_error conda create -q -n test  python=3.7
    else
@@ -351,7 +331,6 @@ retry_on_known_error conda install --no-channel-priority $QUIET $PYTHON_OPTION p
 #
 # For really old pythons it may be necessary, though, so check pip version and
 # install this way if the major version is less than 19.
-echo "4"
 if [[ -z $PIP_VERSION ]]; then
     old_pip=$(python -c "from distutils.version import LooseVersion;\
                 import os; import pip;\
@@ -439,7 +418,6 @@ if [[ ! -z $CONDA_DEPENDENCIES ]]; then
         echo $CONDA_DEPENDENCIES
     fi
 fi
-echo "5"
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     # Do a dry run of the conda install here to make sure that pins are
     # ACTUALLY being respected. This will become unnecessary when
@@ -573,7 +551,6 @@ else
     export NUMPY_OPTION=""
     export CONDA_INSTALL="conda install $QUIET $PYTHON_OPTION $MKL"
 fi
-echo "6"
 # try to install numpy:
 if [[ ! -z $NUMPY_INSTALL ]]; then
     retry_on_known_error $NUMPY_INSTALL || { \
@@ -652,7 +629,6 @@ if [[ ! -z $ASTROPY_VERSION ]]; then
     fi
 
 fi
-echo "7"
 # SUNPY
 if [[ ! -z $SUNPY_VERSION ]]; then
     if [[ $SUNPY_VERSION == dev* ]]; then
@@ -755,7 +731,6 @@ if [[ $SETUP_CMD == *build_sphinx* ]] || [[ $SETUP_CMD == *build_docs* ]]; then
     fi
 
 fi
-echo "8"
 # ADDITIONAL DEPENDENCIES (can include optionals, too)
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     retry_on_known_error $CONDA_INSTALL $CONDA_DEPENDENCIES $CONDA_DEPENDENCIES_FLAGS || { \
@@ -965,7 +940,6 @@ if [[ $DEBUG == True ]]; then
     # exist for python >=3.7
     conda info -a
 fi
-echo "10"
 if [[ ! -z $ASTROPY_VERSION ]]; then
     # Force uninstall hypothesis if it's silently installed as an upstream
     # dependency as the astropy <2.0.3 machinery is incompatible with
