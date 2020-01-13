@@ -210,9 +210,11 @@ fi
 if [[ -z $PIN_FILE_CONDA ]]; then
     PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
 fi
-PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
+
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
+
 retry_on_known_error conda install $QUIET conda
+
 if [ `uname -m` != 'aarch64' ]; then
     if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
         CONDA_CHANNEL_PRIORITY=disabled
