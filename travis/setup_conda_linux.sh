@@ -16,6 +16,7 @@ wget -q $CONDA_URL -O miniconda.sh
 chmod +x miniconda.sh
 mkdir $HOME/.conda
 bash miniconda.sh -b -p $HOME/miniconda
+export PATH= $PATH
 export PATH= $PATH:$HOME/miniconda/bin
 mkdir $HOME/.condarc
 $HOME/miniconda/bin/conda init bash
