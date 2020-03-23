@@ -1,8 +1,3 @@
-if [ `uname -m` = 'aarch64' ]; then
-    wget https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh -O miniconda.sh --progress=dot:mega
-else
-    wget https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh --progress=dot:mega
-fi
 #!/bin/bash
 
 # Install conda (http://conda.pydata.org/docs/travis.html#the-travis-yml-file)
@@ -10,6 +5,11 @@ fi
 # This can be updated from time to time.
 if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
+fi
+if [ `uname -m` = 'aarch64' ]; then
+    wget https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh -O miniconda.sh --progress=dot:mega
+else
+    wget https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh --progress=dot:mega
 fi
 # Create .conda directory before install to workaround conda bug
 # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
