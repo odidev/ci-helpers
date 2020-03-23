@@ -1,3 +1,8 @@
+if [ `uname -m` = 'aarch64' ]; then
+    wget https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh -O miniconda.sh --progress=dot:mega
+else
+    wget https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh --progress=dot:mega
+fi
 #!/bin/bash
 
 # Install conda (http://conda.pydata.org/docs/travis.html#the-travis-yml-file)
@@ -6,25 +11,18 @@
 if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
 fi
-
-if [ `uname -m` = 'aarch64' ]; then
-     CONDA_URL="https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh"
-else
-    CONDA_URL="https://repo.continuum.io/miniconda/Miniconda3-latest-$CONDA_OS.sh"
-fi
-wget -q $CONDA_URL -O miniconda.sh
-chmod +x miniconda.sh
+# Create .conda directory before install to workaround conda bug
+# See https://github.com/ContinuumIO/anaconda-issues/issues/11148
 mkdir $HOME/.conda
 bash miniconda.sh -b -p $HOME/miniconda
-export PATH= $PATH
-export PATH= $PATH:$HOME/miniconda/bin
-mkdir $HOME/.condarc
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
 conda activate base
+
+# Install common Python dependencies
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
+
 if [[ $SETUP_XVFB == True ]]; then
-   export DISPLAY=:99.0
-   /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset
+    export DISPLAY=:99.0
+    /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset
 fi
-export PATH=$MINICONDA_DIR/bin:$PATH
