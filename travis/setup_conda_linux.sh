@@ -6,7 +6,7 @@
 if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
 fi
-
+MINICONDA_DIR=$HOME/miniconda/
 if [ `uname -m` = 'aarch64' ]; then
    wget -q "https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh" -O miniconda.sh
    chmod +x miniconda.sh
