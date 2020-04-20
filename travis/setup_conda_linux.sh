@@ -21,7 +21,7 @@ else
 fi
 mkdir $HOME/.conda
 bash miniconda.sh -b -p $HOME/miniconda
-export PATH=$MINICONDA_DIR/bin:$PATH
+export PATH=$HOME/miniconda/bin/conda:$PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
 conda activate base
