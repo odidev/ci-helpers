@@ -21,6 +21,7 @@ else
    # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
 fi
 mkdir $HOME/.conda
+echo $PATH
 ./miniconda.sh -b -p $HOME/miniconda
 export PATH=/home/travis/miniconda/bin/:$PATH
 $HOME/miniconda/bin/conda init bash
