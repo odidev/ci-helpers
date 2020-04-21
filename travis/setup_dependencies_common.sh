@@ -207,7 +207,7 @@ fi
 # release to release. Add note here if version is pinned due to a bug upstream.
 if [[ -z $CONDA_VERSION ]]; then
     if [ `uname -m` = 'aarch64' ]; then
-        CONDA_VERSION=4.5.12
+        CONDA_VERSION=4.8.2
     else
         CONDA_VERSION=4.7.11
     fi
