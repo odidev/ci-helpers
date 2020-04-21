@@ -2,10 +2,6 @@
 hash -r
 
 set -e
-if [ `uname -m` = 'aarch64' ]; then
-    sudo rm /usr/bin/lsb_release
-fi
-
 # If not set from outside, initialize parameters for the retry_on_known_error()
 # function:
 
