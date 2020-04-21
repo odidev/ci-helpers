@@ -24,7 +24,7 @@ mkdir $HOME/.conda
 export PATH=$HOME/miniconda/bin/:$PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
-$HOME/miniconda/bin/conda activate base
+source activate base
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 if [[ $SETUP_XVFB == True ]]; then
  export DISPLAY=:99.0
