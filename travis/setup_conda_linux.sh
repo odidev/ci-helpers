@@ -10,7 +10,8 @@ MINICONDA_DIR=$HOME/miniconda/
 if [ `uname -m` = 'aarch64' ]; then
    wget -q "https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh" -O miniconda.sh
    chmod +x miniconda.sh
-   > /root/.condarc
+   >/home/travis/.condarc
+   chmod 777 /home/travis/.condarc
 else
    if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
@@ -21,7 +22,7 @@ else
 fi
 mkdir $HOME/.conda
 ./miniconda.sh -b -p $HOME/miniconda
-export PATH=$HOME/miniconda/bin/:$PATH
+export PATH=/home/travis/miniconda/bin/:$PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
 source activate base
