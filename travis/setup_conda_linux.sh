@@ -23,6 +23,7 @@ fi
 mkdir $HOME/.conda
 echo $PATH
 ./miniconda.sh -b -p $HOME/miniconda
+cp -r $Home/bin/ $HOME/miniconda/bin/
 export PATH=/home/travis/miniconda/bin/:$PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
