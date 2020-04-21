@@ -3,8 +3,6 @@ hash -r
 
 set -e
 if [ `uname -m` = 'aarch64' ]; then
-    sudo chmod -R 777 /home/travis/miniconda
-    sudo chmod -R 777 /home/travis/.condarc
     sudo rm /usr/bin/lsb_release
 fi
 
