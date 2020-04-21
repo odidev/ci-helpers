@@ -200,18 +200,16 @@ if [[ -z $PIN_FILE_CONDA ]]; then
 fi
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
 retry_on_known_error conda install $QUIET conda
-if [ `uname -m` != 'aarch64' ]; then
-    if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
-        CONDA_CHANNEL_PRIORITY=disabled
-    else
-        # Make lowercase
-        CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
-    fi
-
-        # We need to add this after the update, otherwise the ``channel_priority``
-        # key may not yet exists
-    conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
+if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
+    CONDA_CHANNEL_PRIORITY=disabled
+else
+    # Make lowercase
+    CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
 fi
+
+    # We need to add this after the update, otherwise the ``channel_priority``
+    # key may not yet exists
+conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
 # Use utf8 encoding. Should be default, but this is insurance against
 # future changes
 export PYTHONIOENCODING=UTF8
