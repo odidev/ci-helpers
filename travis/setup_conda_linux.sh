@@ -21,15 +21,15 @@ else
    # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
 fi
 mkdir $HOME/.conda
-echo $PATH
-./miniconda.sh -b -p $HOME/miniconda
-cp -r $HOME/miniconda/bin/ /usr/bin
-export PATH=/home/travis/miniconda/bin/:$PATH
-echo $PATH
+bash miniconda.sh -b -p $HOME/miniconda
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
-export PATH=/home/travis/miniconda/bin/:$PATH
-source activate base
+if [ `uname -m` = 'aarch64' ]; then
+    export PATH=/home/travis/miniconda/bin/:$PATH
+    source activate base
+else 
+    conda activate base
+fi
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 if [[ $SETUP_XVFB == True ]]; then
  export DISPLAY=:99.0
