@@ -23,8 +23,9 @@ fi
 mkdir $HOME/.conda
 echo $PATH
 ./miniconda.sh -b -p $HOME/miniconda
-cp -r $Home/bin/ $HOME/miniconda/bin/
+cp -r $HOME/miniconda/bin/ $HOME/bin
 export PATH=/home/travis/miniconda/bin/:$PATH
+echo $PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
 source activate base
