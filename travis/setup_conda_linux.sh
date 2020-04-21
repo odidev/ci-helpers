@@ -28,6 +28,7 @@ export PATH=/home/travis/miniconda/bin/:$PATH
 echo $PATH
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
+export PATH=/home/travis/miniconda/bin/:$PATH
 source activate base
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 if [[ $SETUP_XVFB == True ]]; then
