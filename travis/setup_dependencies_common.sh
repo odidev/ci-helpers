@@ -148,28 +148,17 @@ if [[ -z $PYTHON_VERSION ]]; then
 fi
 
 # We will use the 2.0.x releases as "stable" for Python 2.7 and 3.4
-if [ `uname -m` = 'aarch64' ]; then
 
-    if [[ $(python -c "from distutils.version import LooseVersion; import os;\
-            print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.7')") == False ]]; then
-        export LATEST_ASTROPY_STABLE=4.0
-        export LATEST_NUMPY_STABLE=1.17
-    else
-        export LATEST_ASTROPY_STABLE=2.0.16
-        export NO_PYTEST_ASTROPY=True
-        export LATEST_NUMPY_STABLE=1.16
-    fi
+if [[ $(python -c "from distutils.version import LooseVersion; import os;\
+       print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.5')") == False ]]; then
+   export LATEST_ASTROPY_STABLE=4.0
+   export LATEST_NUMPY_STABLE=1.18
 else
-     if [[ $(python -c "from distutils.version import LooseVersion; import os;\
-            print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.5')") == False ]]; then
-        export LATEST_ASTROPY_STABLE=4.0
-        export LATEST_NUMPY_STABLE=1.18
-     else
-        export LATEST_ASTROPY_STABLE=2.0.16
-        export NO_PYTEST_ASTROPY=True
-        export LATEST_NUMPY_STABLE=1.16
-     fi
+   export LATEST_ASTROPY_STABLE=2.0.16
+   export NO_PYTEST_ASTROPY=True
+   export LATEST_NUMPY_STABLE=1.16
 fi
+
 export ASTROPY_LTS_VERSION=2.0.16
 export LATEST_SUNPY_STABLE=1.0.6
 
@@ -249,21 +238,14 @@ fi
 
 
 # CONDA
-if [ `uname -m` == 'aarch64' ]; then
-   if [[ -z $CONDA_ENVIRONMENT ]]; then
-    retry_on_known_error conda create -q -n test  python=3.7
-   else
-    retry_on_known_error conda create -q -n test python=3.7 $CONDA_ENVIRONMENT
-   fi
-   source activate test
+ 
+
+if [[ -z $CONDA_ENVIRONMENT ]]; then
+ retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
 else
-   if [[ -z $CONDA_ENVIRONMENT ]]; then
-    retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
-   else
-    retry_on_known_error conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
-   fi
-   conda activate test
+ retry_on_known_error conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
 fi
+source activate test
 
 
 # PIN FILE
