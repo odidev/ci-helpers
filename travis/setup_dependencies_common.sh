@@ -1,7 +1,10 @@
 #!/bin/bash -x
+
 hash -r
 
 set -e
+
+
 # If not set from outside, initialize parameters for the retry_on_known_error()
 # function:
 
@@ -148,18 +151,16 @@ if [[ -z $PYTHON_VERSION ]]; then
 fi
 
 # We will use the 2.0.x releases as "stable" for Python 2.7 and 3.4
-
 if [[ $(python -c "from distutils.version import LooseVersion; import os;\
-       print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.5')") == False ]]; then
-   export LATEST_ASTROPY_STABLE=4.0
-   export LATEST_NUMPY_STABLE=1.18
+        print(LooseVersion(os.environ['PYTHON_VERSION']) < '3.6')") == False ]]; then
+    export LATEST_ASTROPY_STABLE=4.0
+    export LATEST_NUMPY_STABLE=1.18
 else
-   export LATEST_ASTROPY_STABLE=2.0.16
-   export NO_PYTEST_ASTROPY=True
-   export LATEST_NUMPY_STABLE=1.16
+    export LATEST_ASTROPY_STABLE=2.0.16
+    export NO_PYTEST_ASTROPY=True
+    export LATEST_NUMPY_STABLE=1.16
 fi
-
-export ASTROPY_LTS_VERSION=2.0.16
+export ASTROPY_LTS_VERSION=4.0
 export LATEST_SUNPY_STABLE=1.0.6
 
 
@@ -195,11 +196,15 @@ if [[ -z $CONDA_VERSION ]]; then
         CONDA_VERSION=4.7.11
     fi
 fi
+
 if [[ -z $PIN_FILE_CONDA ]]; then
     PIN_FILE_CONDA=$HOME/miniconda/conda-meta/pinned
 fi
+
 echo "conda ${CONDA_VERSION}" > $PIN_FILE_CONDA
+
 retry_on_known_error conda install $QUIET conda
+
 if [[ -z $CONDA_CHANNEL_PRIORITY ]]; then
     CONDA_CHANNEL_PRIORITY=disabled
 else
@@ -207,9 +212,10 @@ else
     CONDA_CHANNEL_PRIORITY=$(echo $CONDA_CHANNEL_PRIORITY | awk '{print tolower($0)}')
 fi
 
-    # We need to add this after the update, otherwise the ``channel_priority``
-    # key may not yet exists
+# We need to add this after the update, otherwise the ``channel_priority``
+# key may not yet exists
 conda config  --set channel_priority $CONDA_CHANNEL_PRIORITY
+
 # Use utf8 encoding. Should be default, but this is insurance against
 # future changes
 export PYTHONIOENCODING=UTF8
@@ -220,7 +226,6 @@ if [[ ! -z $PYTHON_VERSION ]]; then
 else
     PYTHON_OPTION=""
 fi
-
 
 # Setting the MPL backend to a default to avoid occational segfaults with the qt backend
 if [[ -z $MPLBACKEND ]]; then
@@ -236,15 +241,12 @@ fi
 
 
 # CONDA
- 
-
 if [[ -z $CONDA_ENVIRONMENT ]]; then
- retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
+    retry_on_known_error conda create $QUIET -n test $PYTHON_OPTION
 else
- retry_on_known_error conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
+    retry_on_known_error conda env create $QUIET -n test -f $CONDA_ENVIRONMENT
 fi
-source activate test
-
+conda activate test
 
 # PIN FILE
 if [[ -z $PIN_FILE ]]; then
@@ -264,6 +266,12 @@ if [[ $SETUP_CMD == egg_info ]]; then
 fi
 
 # CORE DEPENDENCIES
+
+# Temporary version limitation, remove once
+# https://github.com/astropy/pytest-doctestplus/issues/94 is fixed and released
+if [[ -z $PYTEST_VERSION ]]; then
+    PYTEST_VERSION="<5.4"
+fi
 
 if [[ ! -z $PYTEST_VERSION ]]; then
     echo "pytest ${PYTEST_VERSION}.*" >> $PIN_FILE
@@ -349,8 +357,15 @@ fi
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
     if [ `uname -m` ! = 'aarch64' ]; then
         if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
-                 $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
-            CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
+                    $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
+                CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
+        fi
+    fi
+
+    # The astropy testrunner is not compatible with coverage 5.0+, thus we limit the version
+    if [[ ! -z $(echo $CONDA_DEPENDENCIES | grep -i pytest-cov) ]]; then
+        if [[ -z $(echo $CONDA_DEPENDENCIES | grep -i coverage) ]]; then
+            CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" coverage<5"
         fi
     fi
 
@@ -472,7 +487,6 @@ if [[ ! -z $NUMPY_VERSION ]]; then
 fi
 
 # We use --no-pin to avoid installing other dependencies just yet.
-
 
 if [ `uname -m` = aarch64]; then
     MKL='';
@@ -710,6 +724,7 @@ fi
 
 # ADDITIONAL DEPENDENCIES (can include optionals, too)
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
+
     retry_on_known_error $CONDA_INSTALL $CONDA_DEPENDENCIES $CONDA_DEPENDENCIES_FLAGS || { \
         $PIP_FALLBACK && { \
         # If there is a problem with conda install, try pip install one-by-one
@@ -877,6 +892,13 @@ fi
 # build time)
 
 if [[ ! -z $PIP_DEPENDENCIES ]]; then
+    # The astropy testrunner is not compatible with coverage 5.0+, thus we limit the version
+    if [[ ! -z $(echo $PIP_DEPENDENCIES | grep -i pytest-cov) ]]; then
+        if [[ -z $(echo $PIP_DEPENDENCIES | grep -i coverage) ]]; then
+            PIP_DEPENDENCIES=${PIP_DEPENDENCIES}" coverage<5"
+        fi
+    fi
+
     $PIP_INSTALL $PIP_DEPENDENCIES $PIP_DEPENDENCIES_FLAGS
 fi
 
@@ -888,14 +910,13 @@ fi
 # install this now in case the user installs cpp-coveralls via PIP_DEPENDENCIES.
 
 if [[ $SETUP_CMD == *coverage* ]]; then
-    # We install requests with conda since it's required by coveralls.
+    # We install requests since it's required by coveralls.
     # Limit the version number as the astropy testrunner is not compatible with v5
-    retry_on_known_error $CONDA_INSTALL 'coverage<5' requests
-    $PIP_INSTALL coveralls codecov
+    $PIP_INSTALL coveralls codecov 'coverage<5' requests
 fi
 
 if [[ $SETUP_CMD == *-cov* ]]; then
-    $PIP_INSTALL coveralls codecov pytest-cov
+    $PIP_INSTALL coveralls codecov pytest-cov 'coverage<5'
 fi
 
 
