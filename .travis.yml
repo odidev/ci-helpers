@@ -1,7 +1,7 @@
 # We set the language to c because python isn't supported on the MacOS X nodes
 # on Travis. However, the language ends up being irrelevant anyway, since we
 # install Python ourselves using conda.
-arch: 
+arch:
     - amd64
     - arm64
 language: c
@@ -17,6 +17,7 @@ env:
         - SETUP_CMD='test'
         - TEST_CMD='py.test test_env.py'
         - PYTHON_VERSION=3.6
+        - SETUP_CONDA=true
 
     matrix:
         - SETUP_CMD='egg_info' TEST_CMD='python --version'
@@ -106,7 +107,7 @@ matrix:
         # and we want the pip fallback to happen.
         - os: linux
           env: SETUP_CMD='test --coverage' PYTHON_VERSION=3.6
-               TEST_CMD='conda list && python -c "import ipyevents; assert ipyevents.__version__.startswith(\"0.4\")" && py.test test_env.py && coverage run test_env.py'
+               TEST_CMD='conda list && python -c "import ipyevents; assert ipyevents.__version__.startswith(\"0.4\"); import coverage; assert int(coverage.__version__[0]) < 5" && py.test test_env.py && coverage run test_env.py'
                CONDA_CHANNELS=''
                CONDA_DEPENDENCIES='libtiff pytest pytest-cov ipyevents'
                DEBUG=True ASTROPY_VERSION=stable
@@ -270,9 +271,10 @@ before_install:
       else
         ln -s . ci-helpers;
       fi
-    - source ci-helpers/travis/setup_conda.sh
+    - if [[ $SETUP_CONDA == true ]]; then source ci-helpers/travis/setup_conda.sh; fi
 
 script:
+   - python --version
    - eval $TEST_CMD
 
 after_success:
