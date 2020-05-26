@@ -19,9 +19,7 @@ mkdir $HOME/.conda
 bash miniconda.sh -b -p $HOME/miniconda
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
-if [ `uname -m` = 'aarch64' ]; then
-    export PATH=$MINICONDA_DIR/bin/:$PATH
-fi
+export PATH=$MINICONDA_DIR/bin/:$PATH
 source activate base
 
 
