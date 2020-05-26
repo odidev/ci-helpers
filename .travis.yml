@@ -19,6 +19,9 @@ env:
 jobs:
     include:
         # pytest dev version
+        - arch: arm64
+          os: linux
+          dist: debian 
         - os: linux
           env: PYTHON_VERSION=3.8 PYTEST_VERSION=dev
 

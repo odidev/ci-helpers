@@ -6,14 +6,24 @@
 if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
 fi
-wget https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh --progress=dot:mega
-# Create .conda directory before install to workaround conda bug
-# See https://github.com/ContinuumIO/anaconda-issues/issues/11148
+MINICONDA_DIR=$HOME/miniconda/
+if [ `uname -m` = 'aarch64' ]; then
+   wget -q "https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh" -O miniconda.sh
+   chmod +x miniconda.sh
+else
+   wget https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh --progress=dot:mega
+   # Create .conda directory before install to workaround conda bug
+   # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
+fi
 mkdir $HOME/.conda
 bash miniconda.sh -b -p $HOME/miniconda
 $HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
-conda activate base
+if [ `uname -m` = 'aarch64' ]; then
+    export PATH=/home/travis/miniconda/bin/:$PATH
+fi
+source activate base
+
 
 # Install common Python dependencies
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh

@@ -190,7 +190,11 @@ fi
 # We pin the version for conda as it's not the most stable package from
 # release to release. Add note here if version is pinned due to a bug upstream.
 if [[ -z $CONDA_VERSION ]]; then
-    CONDA_VERSION=4.7.11
+    if [ `uname -m` = 'aarch64' ]; then
+        CONDA_VERSION=4.8.2
+    else
+        CONDA_VERSION=4.7.11
+    fi
 fi
 
 if [[ -z $PIN_FILE_CONDA ]]; then
@@ -345,10 +349,11 @@ fi
 # Pin required versions for dependencies, howto is in FAQ of conda
 # https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#preventing-packages-from-updating-pinning
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
-
-    if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
-            $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
-        CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
+    if [ `uname -m` ! = 'aarch64' ]; then
+        if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
+                    $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
+                CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
+        fi
     fi
 
     # The astropy testrunner is not compatible with coverage 5.0+, thus we limit the version
@@ -478,7 +483,11 @@ fi
 # We use --no-pin to avoid installing other dependencies just yet.
 
 
-MKL='nomkl'
+if [ `uname -m` = aarch64]; then
+    MKL='';
+else
+    MKL='nomkl';
+fi
 if [[ ! -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') ||
         $TRAVIS_OS_NAME == windows || -z $NUMPY_VERSION ]]; then
     MKL=''
