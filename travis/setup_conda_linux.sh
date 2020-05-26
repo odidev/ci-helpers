@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Install conda (http://conda.pydata.org/docs/travis.html#the-travis-yml-file)
 # Note that we pin the Miniconda version to avoid issues when new versions are released.
 # This can be updated from time to time.
@@ -16,13 +15,11 @@ else
    # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
 fi
 mkdir $HOME/.conda
-bash miniconda.sh -b -p $HOME/miniconda
-$HOME/miniconda/bin/conda init bash
+bash miniconda.sh -b -p $MINICONDA_DIR
+$MINICONDA_DIR/bin/conda init bash
 source ~/.bash_profile
 export PATH=$MINICONDA_DIR/bin/:$PATH
 source activate base
-
-
 # Install common Python dependencies
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
 
