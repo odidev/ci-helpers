@@ -5,7 +5,6 @@
 if [[ -z "${MINICONDA_VERSION}" ]]; then
     MINICONDA_VERSION=4.7.10
 fi
-MINICONDA_DIR=$HOME/miniconda/
 if [ `uname -m` = 'aarch64' ]; then
    wget -q "https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh" -O miniconda.sh
    chmod +x miniconda.sh
@@ -15,14 +14,13 @@ else
    # See https://github.com/ContinuumIO/anaconda-issues/issues/11148
 fi
 mkdir $HOME/.conda
-bash miniconda.sh -b -p $MINICONDA_DIR
-$MINICONDA_DIR/bin/conda init bash
+bash miniconda.sh -b -p $HOME/miniconda
+$HOME/miniconda/bin/conda init bash
 source ~/.bash_profile
-export PATH=$MINICONDA_DIR/bin/:$PATH
+export PATH=$HOME/miniconda/bin/:$PATH
 source activate base
 # Install common Python dependencies
 source "$( dirname "${BASH_SOURCE[0]}" )"/setup_dependencies_common.sh
-
 if [[ $SETUP_XVFB == True ]]; then
     export DISPLAY=:99.0
     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset
