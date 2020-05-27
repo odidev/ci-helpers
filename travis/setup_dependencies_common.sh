@@ -349,11 +349,9 @@ fi
 # Pin required versions for dependencies, howto is in FAQ of conda
 # https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#preventing-packages-from-updating-pinning
 if [[ ! -z $CONDA_DEPENDENCIES ]]; then
-    if [ `uname -m` ! = 'aarch64' ]; then
         if [[ -z $(echo $CONDA_DEPENDENCIES | grep '\bmkl\b') &&
                     $TRAVIS_OS_NAME != windows && ! -z $NUMPY_VERSION ]]; then
                 CONDA_DEPENDENCIES=${CONDA_DEPENDENCIES}" nomkl"
-        fi
     fi
 
     # The astropy testrunner is not compatible with coverage 5.0+, thus we limit the version
